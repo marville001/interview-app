@@ -5,6 +5,10 @@ const SuccessStep = () => {
     <div>
       <h1 className="text-center">Well done</h1>
       <p className="my-4 text-center">You have completed your interview</p>
+
+      <div className="d-flex justify-content-center">
+        <button className="btn text-center btn-success">Done</button>
+      </div>
     </div>
   );
 };
