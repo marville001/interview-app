@@ -8,7 +8,7 @@ const Header = () => {
     <Navbar bg="dark" variant="dark">
       <Container>
         <Navbar.Brand href="#home">
-          <BsFillDiscFill /> React Bootstrap
+          <BsFillDiscFill /> XYZ Interview
         </Navbar.Brand>
       </Container>
     </Navbar>
