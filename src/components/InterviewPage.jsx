@@ -4,7 +4,7 @@ import * as questions from "../questions.json";
 
 const videoType = "video/webm";
 
-export default class PracticeInterviewStep extends React.Component {
+export default class InterviewPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,8 +24,8 @@ export default class PracticeInterviewStep extends React.Component {
   }
 
   async componentDidMount() {
-    const { practice } = questions;
-    const quiz = practice?.find((p) => p.id === this.state.index.toString());
+    const { interview } = questions;
+    const quiz = interview?.find((p) => p.id === this.state.index.toString());
     this.setState({ current: quiz });
     const stream = await navigator.mediaDevices.getUserMedia({
       video: true,
@@ -48,12 +48,33 @@ export default class PracticeInterviewStep extends React.Component {
     };
   }
 
+  startRecording(e) {
+    e.preventDefault();
+    // wipe old data chunks
+    this.chunks = [];
+    // start recorder with 10ms buffer
+    this.mediaRecorder.start(10);
+    // say that we're recording
+    this.setState({ recording: true });
+  }
+
+  stopRecording(e) {
+    e.preventDefault();
+    // stop the recorder
+    this.mediaRecorder.stop();
+    // say that we're not recording
+    this.setState({ recording: false });
+    // save the video to memory
+    this.saveVideo();
+  }
+
   handleNextQuestion = () => {
-    const { practice } = questions;
-    const length = practice.length;
-    if (length - 1  === this.state.index+1) {
+    const { interview } = questions;
+    const length = interview.length;
+    if (length === this.state.index + 2) {
       this.setState({ end: true });
-    }
+    } 
+    
     if(this.state.index +1 <= length){
       this.setState({ index: this.state.index + 1 });
     }
@@ -72,8 +93,8 @@ export default class PracticeInterviewStep extends React.Component {
 
 
   render() {
-    const { current,  index, end } = this.state;
-    const { practice } = questions;
+    const { recording, videos, current,  index, end } = this.state;
+    const { interview } = questions;
     const { step, setStep } = this.props;
 
     console.log(this.state);
@@ -81,7 +102,7 @@ export default class PracticeInterviewStep extends React.Component {
     return (
       <div className="my-3">
         <p>
-          Interview for #546673. This is the practice session and is not part of
+          Interview for #546673. This is the interview session and is not part of
           your actual interview. You can practice as many tims as you want.
         </p>
 
@@ -89,7 +110,7 @@ export default class PracticeInterviewStep extends React.Component {
           <div className="quiz-row">
             <div className="p-2">
               <span style={{ fontWeight: "bold" }}>
-                Question {index + 1 + " / " + practice.length}
+                Question {index + 1 + " / " + interview.length}
               </span>
               <h6>{current.question} </h6>
             </div>

@@ -1,9 +1,51 @@
 {
+    "interview":[
+        {
+            "id":"0",
+            "question":"Can you tell me more about the day-to-day responsibilities of the role?",
+            "duration": 2
+        },
+        {
+            "id":"1",
+            "question":"What do you enjoy about your job?",
+            "duration": 1
+        },
+        {
+            "id":"2",
+            "question":"Are there opportunities for training and progression within the role/company?",
+            "duration": 1
+        },
+        {
+            "id":"3",
+            "question":"Where do you think the company is headed in the next five years?",
+            "duration": 1
+        },
+        {
+            "id":"4",
+            "question":"How could I impress you in the first three months?",
+            "duration": 1
+        }
+    ],
     "practice":[
         {
             "id":"0",
-            "question":"Whats",
+            "question":"What did you do before this?",
+            "duration": 3
+        },
+        {
+            "id":"1",
+            "question":"What do you enjoy about your job?",
+            "duration": 1
+        },
+        {
+            "id":"2",
+            "question":"Why did you come to this company?",
             "duration": 2
+        },
+        {
+            "id":"3",
+            "question":"What’s your favorite part working here?",
+            "duration": 1
         }
     ]
 }

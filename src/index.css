@@ -34,8 +34,7 @@ a {
 
 .cam-container {
   background-color: gray;
-  min-width: 250px;
-  height: 250px;
+  min-width: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
