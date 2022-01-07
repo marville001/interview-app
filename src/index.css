@@ -1,0 +1,50 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 900px;
+  padding: 0px 20px;
+}
+
+.container-sm {
+  max-width: 900px;
+  padding: 0px 20px;
+}
+
+.checkCam {
+  border-radius: 60px;
+  padding: 10px 25px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.quiz-container {
+  border-left: 2px solid #f4f4f4;
+  padding: 20px;
+}
+.quiz-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cam-container {
+  background-color: gray;
+  min-width: 250px;
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.check-box{
+    width: 35px;
+    height: 35px;
+    padding: 10px;
+    font-size: 30px;
+    margin-right: 10px;
+}
