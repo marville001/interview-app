@@ -8,17 +8,17 @@ import SuccessStep from "../components/SuccessStep";
 import WelcomeStep from "../components/WelcomeStep";
 
 const WelcomePage = () => {
-  const [step, setStep] = useState(6);
+  const [step, setStep] = useState(0);
 
   const steps = [
-  <WelcomeStep step={step} setStep={setStep} />, 
-  <ConfirmAudioStep step={step} setStep={setStep} />,
-  <FamiliarizePage step={step} setStep={setStep} />,
-  <PracticeInterviewStep step={step} setStep={setStep} />,
-  <PreInterviewStep step={step} setStep={setStep} />,
-  <InterviewPage step={step} setStep={setStep} />,
-  <SuccessStep />
-];
+    <WelcomeStep step={step} setStep={setStep} />,
+    <ConfirmAudioStep step={step} setStep={setStep} />,
+    <FamiliarizePage step={step} setStep={setStep} />,
+    <PracticeInterviewStep step={step} setStep={setStep} />,
+    <PreInterviewStep step={step} setStep={setStep} />,
+    <InterviewPage step={step} setStep={setStep} />,
+    <SuccessStep />,
+  ];
 
   return (
     <div className="my-5">
