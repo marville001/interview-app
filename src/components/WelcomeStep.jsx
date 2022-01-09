@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from "react";
 
 const WelcomeStep = ({ step, setStep }) => {
-  const [video, setVideo] = useState({});
+  const [video, setVideo] = useState([]);
   useEffect(() => {
-    const vs = localStorage.getItem("videos");
-    console.log(vs);
+    const vs = JSON.parse(localStorage.getItem("videos")) || [];
     if (vs.length > 1) {
-      // setVideo(vs[0]);
+      setVideo(vs);
     }
   }, []);
 
   return (
     <div className="mt-3">
       <p>Hi There</p>
-      {video.blob && (
-        <video
-          style={{ width: 500 }}
-          src={window.URL.createObjectURL(new Blob(video.blob))}
-          autoPlay
-          loop
-        />
-      )}
+      <div className="d-flex">
+        {video.length >= 1 &&
+          video?.map((v) => (
+            <video style={{ width: 200 }} src={v} autoPlay controls loop />
+          ))}
+      </div>
       <p>
         Thank you for using our platform. We welcome you to our website and hope
         you have a great experience

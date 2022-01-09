@@ -4,26 +4,8 @@ import Context from "../context";
 const SuccessStep = () => {
   const { state } = useContext(Context);
 
-  function blobToBase64(blob) {
-    return new Promise((resolve, _) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.readAsDataURL(blob);
-    });
-  }
-
   const handleExit = async () => {
-    const videosBlobs = state.videos.map((v) => v.blob);
-    const base64Videos = videosBlobs.map(
-      async (blob) => await blobToBase64(blob)
-    );
-
-    base64Videos.forEach(async (v) => {
-      v = await v;
-      console.log(await v);
-    });
-
-    console.log({ base64Videos });
+    
     // localStorage.setItem("videos", state.videos);
   };
 

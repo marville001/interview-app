@@ -78,7 +78,7 @@ export default class InterviewPage extends React.Component {
     const newState = [
       ...this.context.state.videos,
       { interviewId: "awewa", questionId: this.state.current.id, blob },
-    ]
+    ];
     this.context.setState({
       videos: newState,
     });
@@ -101,15 +101,41 @@ export default class InterviewPage extends React.Component {
     this.startRecording();
   };
 
+  blobToBase64 = (blob) => {
+    return new Promise((resolve, _) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
+  };
+
   handleSubmit = () => {
     let state_ = this.stopRecording();
     // this.props.setStep(this.props.step + 1);
-    console.log({state_});
+    console.log({ state_ });
+    const videosBlobs = state_.map((v) => v.blob);
+    const base64Videos = videosBlobs.map(
+      async (blob) => await this.blobToBase64(blob)
+    );
+
+    let vsss = [];
+
+    localStorage.removeItem("videos");
+
+    base64Videos.forEach(async (v) => {
+      v = await v;
+      let vs = JSON.parse(localStorage.getItem("videos")) || [];
+      vs.push(v);
+      vsss.push(v);
+      localStorage.setItem("videos", JSON.stringify(vs));
+      // console.log(await v);
+    });
+
+    console.log({ vsss });
   };
 
   render() {
     const { recording, interview, current, index, end } = this.state;
-    console.log({ current });
     return (
       <div className="my-3">
         <p>
