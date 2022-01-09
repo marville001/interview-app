@@ -1,5 +1,6 @@
 /* eslint-env browser */
 import React from "react";
+import Context from "../context";
 import * as questions from "../questions.json";
 
 const videoType = "video/webm";
@@ -9,101 +10,111 @@ export default class InterviewPage extends React.Component {
     super(props);
     this.state = {
       recording: false,
-      videos: [],
       current: {},
-      practice: [
-        {
-          id: "0",
-          question: "What did you do before this?",
-          duration: 3,
-        },
-      ],
+      interview: [],
       index: 0,
       end: false,
     };
   }
 
+  static contextType = Context;
+
   async componentDidMount() {
     const { interview } = questions;
+    this.setState({ interview });
+    this.setState({ current: interview[this.state.index] });
     const quiz = interview?.find((p) => p.id === this.state.index.toString());
     this.setState({ current: quiz });
+
+    this.startRecording();
+  }
+
+  async startRecording() {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: true,
-      //   audio: true,
+      audio: true,
     });
     // show it to user
     this.video.srcObject = stream;
     this.video.play();
+
     // init recording
     this.mediaRecorder = new MediaRecorder(stream, {
       mimeType: videoType,
     });
+    // start recorder with 10ms buffer
+    this.mediaRecorder.start(10);
+
     // init data storage for video chunks
     this.chunks = [];
     // listen for data from media recorder
     this.mediaRecorder.ondataavailable = (e) => {
       if (e.data && e.data.size > 0) {
         this.chunks.push(e.data);
+      } else {
+        console.log("no data");
       }
     };
-  }
-
-  startRecording(e) {
-    e.preventDefault();
-    // wipe old data chunks
-    this.chunks = [];
-    // start recorder with 10ms buffer
-    this.mediaRecorder.start(10);
     // say that we're recording
     this.setState({ recording: true });
   }
 
-  stopRecording(e) {
-    e.preventDefault();
+  stopRecording() {
     // stop the recorder
     this.mediaRecorder.stop();
     // say that we're not recording
     this.setState({ recording: false });
     // save the video to memory
-    this.saveVideo();
+    return this.saveVideo();
+  }
+
+  saveVideo() {
+    // console.log({chunks: this.chunks});
+    // convert saved chunks to blob
+    const blob = new Blob(this.chunks, { type: videoType });
+    // localStorage.setItem('blob', JSON.stringify(blob))
+    // generate video url from blob
+    // const videoURL = window.URL.createObjectURL(blob);
+    const newState = [
+      ...this.context.state.videos,
+      { interviewId: "awewa", questionId: this.state.current.id, blob },
+    ]
+    this.context.setState({
+      videos: newState,
+    });
+    return newState;
   }
 
   handleNextQuestion = () => {
-    const { interview } = questions;
+    this.stopRecording();
+    const { interview } = this.state;
     const length = interview.length;
     if (length === this.state.index + 2) {
       this.setState({ end: true });
-    } 
-    
-    if(this.state.index +1 <= length){
-      this.setState({ index: this.state.index + 1 });
     }
+
+    if (this.state.index + 1 <= length) {
+      this.setState({ index: this.state.index + 1 });
+      this.setState({ current: interview[this.state.index + 1] });
+    }
+
+    this.startRecording();
   };
 
-  saveVideo() {
-    // convert saved chunks to blob
-    const blob = new Blob(this.chunks, { type: videoType });
-    // generate video url from blob
-    const videoURL = window.URL.createObjectURL(blob);
-    // append videoURL to list of saved videos for rendering
-    const videos = this.state.videos.concat([videoURL]);
-    this.setState({ videos });
-  }
-
-
+  handleSubmit = () => {
+    let state_ = this.stopRecording();
+    // this.props.setStep(this.props.step + 1);
+    console.log({state_});
+  };
 
   render() {
-    const { recording, videos, current,  index, end } = this.state;
-    const { interview } = questions;
-    const { step, setStep } = this.props;
-
-    console.log(this.state);
-
+    const { recording, interview, current, index, end } = this.state;
+    console.log({ current });
     return (
       <div className="my-3">
         <p>
-          Interview for #546673. This is the interview session and is not part of
-          your actual interview. You can practice as many tims as you want.
+          Interview for #546673. This is the interview session and is not part
+          of your actual interview. You can practice as many tims as you want.
         </p>
 
         <div className="quiz-container">
@@ -112,7 +123,7 @@ export default class InterviewPage extends React.Component {
               <span style={{ fontWeight: "bold" }}>
                 Question {index + 1 + " / " + interview.length}
               </span>
-              <h6>{current.question} </h6>
+              <h6>{current?.question} </h6>
             </div>
             <div className="cam-container">
               {
@@ -121,10 +132,12 @@ export default class InterviewPage extends React.Component {
                   ref={(v) => {
                     this.video = v;
                   }}
+                  muted
                 >
                   Video stream not available.
                 </video>
               }
+              <div className={`is-recording ${recording && "active"}`}></div>
             </div>
           </div>
           <h6>
@@ -136,11 +149,8 @@ export default class InterviewPage extends React.Component {
         <div className="d-flex align-items-center justify-content-center mb-3 mt-5">
           <input type="checkbox" className="check-box" />
           {end ? (
-            <button
-              className="btn btn-primary"
-              onClick={()=>setStep(step+1)}
-            >
-              Submit
+            <button className="btn btn-primary" onClick={this.handleSubmit}>
+              Finish
             </button>
           ) : (
             <button
@@ -150,6 +160,8 @@ export default class InterviewPage extends React.Component {
               Next Question
             </button>
           )}
+          {}
+          {this.context.state.videos?.length}
         </div>
       </div>
     );

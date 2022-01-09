@@ -8,7 +8,7 @@ import SuccessStep from "../components/SuccessStep";
 import WelcomeStep from "../components/WelcomeStep";
 
 const WelcomePage = () => {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(5);
 
   const steps = [
     <WelcomeStep step={step} setStep={setStep} />,

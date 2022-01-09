@@ -25,6 +25,8 @@ export default class PracticeInterviewStep extends React.Component {
 
   async componentDidMount() {
     const { practice } = questions;
+    this.setState({ practice });
+    
     const quiz = practice?.find((p) => p.id === this.state.index.toString());
     this.setState({ current: quiz });
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -49,7 +51,7 @@ export default class PracticeInterviewStep extends React.Component {
   }
 
   handleNextQuestion = () => {
-    const { practice } = questions;
+    const { practice } = this.state;
     const length = practice.length;
     if (length - 1  === this.state.index+1) {
       this.setState({ end: true });
@@ -57,6 +59,7 @@ export default class PracticeInterviewStep extends React.Component {
     if(this.state.index +1 <= length){
       this.setState({ index: this.state.index + 1 });
     }
+
   };
 
   saveVideo() {
@@ -72,8 +75,7 @@ export default class PracticeInterviewStep extends React.Component {
 
 
   render() {
-    const { current,  index, end } = this.state;
-    const { practice } = questions;
+    const { current, practice,  index, end } = this.state;
     const { step, setStep } = this.props;
 
     console.log(this.state);
@@ -91,7 +93,7 @@ export default class PracticeInterviewStep extends React.Component {
               <span style={{ fontWeight: "bold" }}>
                 Question {index + 1 + " / " + practice.length}
               </span>
-              <h6>{current.question} </h6>
+              <h6>{practice[index].question} </h6>
             </div>
             <div className="cam-container">
               {

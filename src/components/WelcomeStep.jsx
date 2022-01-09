@@ -1,9 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const WelcomeStep = ({ step, setStep }) => {
+  const [video, setVideo] = useState({});
+  useEffect(() => {
+    const vs = localStorage.getItem("videos");
+    console.log(vs);
+    if (vs.length > 1) {
+      // setVideo(vs[0]);
+    }
+  }, []);
+
   return (
     <div className="mt-3">
       <p>Hi There</p>
+      {video.blob && (
+        <video
+          style={{ width: 500 }}
+          src={window.URL.createObjectURL(new Blob(video.blob))}
+          autoPlay
+          loop
+        />
+      )}
       <p>
         Thank you for using our platform. We welcome you to our website and hope
         you have a great experience
