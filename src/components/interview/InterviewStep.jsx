@@ -1,11 +1,11 @@
 /* eslint-env browser */
 import React from "react";
-import Context from "../context";
-import * as questions from "../questions.json";
+import Context from "../../context";
+import * as questions from "../../questions.json";
 
 const videoType = "video/webm";
 
-export default class InterviewPage extends React.Component {
+export default class InterviewStep extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

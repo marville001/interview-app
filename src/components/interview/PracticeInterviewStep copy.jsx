@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import * as questions from "../questions.json";
+import * as questions from "../../questions.json";
 import { RecordRTCPromisesHandler } from "recordrtc";
 import { Player } from "video-react";
 

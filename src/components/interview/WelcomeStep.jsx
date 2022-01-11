@@ -1,23 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
+import Context from "../../context";
 
 const WelcomeStep = ({ step, setStep }) => {
-  const [video, setVideo] = useState([]);
-  useEffect(() => {
-    const vs = JSON.parse(localStorage.getItem("videos")) || [];
-    if (vs.length > 1) {
-      setVideo(vs);
-    }
-  }, []);
+  const { state } = useContext(Context);
 
   return (
     <div className="mt-3">
       <p>Hi There</p>
-      <div className="d-flex">
-        {video.length >= 1 &&
-          video?.map((v) => (
-            <video style={{ width: 200 }} src={v} autoPlay controls loop />
-          ))}
-      </div>
       <p>
         Thank you for using our platform. We welcome you to our website and hope
         you have a great experience
@@ -26,40 +15,46 @@ const WelcomeStep = ({ step, setStep }) => {
         Before proceeding to your scheduled video interview, please verify your
         following personal information
       </p>
-      <table className="my-4">
-        <tr>
-          <td>
-            <h6>Name</h6>
-          </td>
-          <td className="px-3">
-            <h6>Martin Mwangi</h6>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <h6>Email</h6>
-          </td>
-          <td className="px-3">
-            <h6>mwangitttttttttttttt@gmail.com</h6>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <h6>Position</h6>
-          </td>
-          <td className="px-3">
-            <h6>Developer</h6>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <h6>Company</h6>
-          </td>
-          <td className="px-3">
-            <h6>HGHGHGH GGH</h6>
-          </td>
-        </tr>
-      </table>
+      {state.loading ? (
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      ) : (
+        <table className="my-4">
+          <tr>
+            <td>
+              <h6>Name</h6>
+            </td>
+            <td className="px-3">
+              <h6>{state?.candidate?.name}</h6>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h6>Email</h6>
+            </td>
+            <td className="px-3">
+              <h6>{state?.candidate?.email}</h6>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h6>Phone</h6>
+            </td>
+            <td className="px-3">
+              <h6>{state?.candidate?.phone}</h6>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h6>Interview Title</h6>
+            </td>
+            <td className="px-3">
+              <h6>{state?.interview?.title}</h6>
+            </td>
+          </tr>
+        </table>
+      )}
       <div className="d-flex align-items-center">
         <input
           id="check"

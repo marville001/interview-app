@@ -1,6 +1,6 @@
 /* eslint-env browser */
 import React from "react";
-import * as questions from "../questions.json";
+import * as questions from "../../questions.json";
 
 const videoType = "video/webm";
 

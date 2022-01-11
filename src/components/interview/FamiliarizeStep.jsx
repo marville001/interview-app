@@ -1,6 +1,6 @@
 import React from "react";
 
-const FamiliarizePage = ({ step, setStep }) => {
+const FamiliarizeStep = ({ step, setStep }) => {
   return (
     <div className="my-5">
       <p>
@@ -25,4 +25,4 @@ const FamiliarizePage = ({ step, setStep }) => {
   );
 };
 
-export default FamiliarizePage;
+export default FamiliarizeStep;
