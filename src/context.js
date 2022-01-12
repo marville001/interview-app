@@ -31,9 +31,37 @@ export const ContextProvider = ({ children }) => {
     }
   };
 
+  const submitInterviewAnswers = async (blobs) => {
+    console.log({ blobs });
+    try {
+      let formData = new FormData();
+
+      for (let blob of blobs) {
+        formData.append("files", blob);
+      }
+
+      setState((prev) => ({ ...prev, loading: true }));
+      const { data } = await axios.post(
+        `https://my-interview-api.herokuapp.com/api/candidate/submit_answers/${state.interview._id}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      console.log({ data });
+      setState((prev) => ({
+        ...prev,
+        loading: false,
+      }));
+    } catch (error) {
+      setState((prev) => ({ ...prev, loading: false }));
+      console.log({ error });
+    }
+  };
+
   const fetchInterviewDetails = async (token) => {
     try {
-      setState(prev=>({...prev, loading: true }));
+      setState((prev) => ({ ...prev, loading: true }));
       const { data } = await axios.get(
         `https://my-interview-api.herokuapp.com/api/interview/get/${token}`
       );
@@ -75,6 +103,7 @@ export const ContextProvider = ({ children }) => {
         addCandidate,
         fetchInterviewDetails,
         fetchCandidateDetails,
+        submitInterviewAnswers,
       }}
     >
       {children}
