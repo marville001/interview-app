@@ -10,48 +10,58 @@ export const ContextProvider = ({ children }) => {
     videos: [],
     candidate: {},
     interview: {},
+    initials: "",
   });
 
   const addCandidate = async (details) => {
     try {
-      setState({ loading: true });
+      setState((prev) => ({ ...prev, loading: true }));
       const { data } = await axios.post(
         "https://my-interview-api.herokuapp.com/api/candidate",
         details
       );
-      setState({ candidate: data.candidate, loading: false });
+      setState((prev) => ({
+        ...prev,
+        candidate: data.candidate,
+        loading: false,
+      }));
     } catch (error) {
-      setState({ loading: false });
+      setState((prev) => ({ ...prev, loading: false }));
       console.log({ error });
     }
   };
 
   const fetchInterviewDetails = async (token) => {
     try {
-      setState({ loading: true });
+      setState(prev=>({...prev, loading: true }));
       const { data } = await axios.get(
         `https://my-interview-api.herokuapp.com/api/interview/get/${token}`
       );
-      setState({ interview: data.interview, loading: false });
+      setState((prev) => ({
+        ...prev,
+        interview: data.interview,
+        loading: false,
+      }));
     } catch (error) {
-      setState({ loading: false });
+      setState((prev) => ({ ...prev, loading: false }));
       console.log({ error });
     }
   };
 
   const fetchCandidateDetails = async (token) => {
     try {
-      setState({ loading: true });
+      setState((prev) => ({ ...prev, loading: true }));
       const { data } = await axios.get(
         `https://my-interview-api.herokuapp.com/api/candidate/invite/${token}`
       );
-      setState({
+      setState((prev) => ({
+        ...prev,
         candidate: data.candidate,
         interview: data.candidate.interviewId,
         loading: false,
-      });
+      }));
     } catch (error) {
-      setState({ loading: false });
+      setState((prev) => ({ ...prev, loading: false }));
       console.log({ error });
     }
   };

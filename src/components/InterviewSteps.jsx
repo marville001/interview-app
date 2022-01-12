@@ -12,7 +12,7 @@ const InterviewSteps = ({ form }) => {
   const [step, setStep] = useState(0);
 
   const first = form ? (
-    <CorrectDetailsStep />
+    <CorrectDetailsStep step={step} setStep={setStep}  />
   ) : (
     <WelcomeStep step={step} setStep={setStep} />
   );

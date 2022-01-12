@@ -5,6 +5,7 @@ const CorrectDetailsStep = ({ step, setStep }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+
   const { addCandidate, state } = useContext(Context);
 
   const handleSubmitDetails = async () => {
@@ -21,6 +22,8 @@ const CorrectDetailsStep = ({ step, setStep }) => {
       return;
     }
 
+    console.log(state);
+
     let {
       interview: { _id },
     } = state;
@@ -31,11 +34,13 @@ const CorrectDetailsStep = ({ step, setStep }) => {
       phone: phone,
       additionalDetails: "Test Data",
       interviewId: _id,
-      deadline: new Date(),
+      deadline: "15/01/2022",
     };
 
-    await addCandidate({ email });
+    await addCandidate(obj);
   };
+
+  console.log({state});
 
   return (
     <div className="mt-3">
@@ -57,7 +62,7 @@ const CorrectDetailsStep = ({ step, setStep }) => {
           </div>
         ) : (
           <>
-            {state?.candidate ? (
+            {state?.candidate?._id ? (
               <div>
                 <table className="my-4">
                   <tr>
@@ -175,7 +180,7 @@ const CorrectDetailsStep = ({ step, setStep }) => {
       </p>
 
       <button
-        disabled
+        disabled={!state?.candidate?._id || !state?.interview?._id ? true : false}
         onClick={() => setStep(step + 1)}
         className="btn btn-success"
       >

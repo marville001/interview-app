@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import Context from "../../context";
 
 const ConfirmAudioStep = ({ step, setStep }) => {
+  const [checkCam, setCheckCam] = useState(false);
+  const [checkTerms, setCheckTerms] = useState(false);
+  const [checkNet, setCheckNet] = useState(false);
+  
   return (
     <div className="my-5">
       <p>
@@ -19,6 +24,8 @@ const ConfirmAudioStep = ({ step, setStep }) => {
           id="internet"
           type="checkbox"
           name=""
+          checked={checkNet}
+          onChange={e=>setCheckNet(e.target.checked)}
           className="form-controll mt-1 mx-3"
         />
         <label htmlFor="internet" className="py-0 m-0 mx-2">
@@ -30,6 +37,8 @@ const ConfirmAudioStep = ({ step, setStep }) => {
           id="check"
           type="checkbox"
           name=""
+          checked={checkCam}
+          onChange={e=>setCheckCam(e.target.checked)}
           className="form-controll mt-1 mx-3"
         />
         <label htmlFor="check" className="py-0 m-0 mx-2">
@@ -41,6 +50,8 @@ const ConfirmAudioStep = ({ step, setStep }) => {
           id="terms"
           type="checkbox"
           name=""
+          checked={checkTerms}
+          onChange={e=>setCheckTerms(e.target.checked)}
           className="form-controll mt-1 mx-3"
         />
         <label htmlFor="terms" className="py-0 m-0 mx-2">
@@ -51,6 +62,7 @@ const ConfirmAudioStep = ({ step, setStep }) => {
 
       <div className="d-flex justify-content-center mb-3 mt-5">
         <button
+        disabled={checkTerms && checkNet && checkCam ? false: true}
           onClick={() => setStep(step + 1)}
           className="btn btn-primary checkCam"
         >

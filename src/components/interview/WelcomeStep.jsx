@@ -77,7 +77,13 @@ const WelcomeStep = ({ step, setStep }) => {
         ineterview
       </p>
 
-      <button onClick={() => setStep(step + 1)} className="btn btn-success">
+      <button
+        disabled={
+          !state?.candidate?._id || !state?.interview?._id ? true : false
+        }
+        onClick={() => setStep(step + 1)}
+        className="btn btn-success"
+      >
         Continue
       </button>
     </div>

@@ -9,7 +9,6 @@ export default class PracticeInterviewStep extends React.Component {
     super(props);
     this.state = {
       recording: false,
-      videos: [],
       current: {},
       practice: [
         {
@@ -62,24 +61,10 @@ export default class PracticeInterviewStep extends React.Component {
 
   };
 
-  saveVideo() {
-    // convert saved chunks to blob
-    const blob = new Blob(this.chunks, { type: videoType });
-    // generate video url from blob
-    const videoURL = window.URL.createObjectURL(blob);
-    // append videoURL to list of saved videos for rendering
-    const videos = this.state.videos.concat([videoURL]);
-    this.setState({ videos });
-  }
-
-
 
   render() {
     const { current, practice,  index, end } = this.state;
     const { step, setStep } = this.props;
-
-    console.log(this.state);
-
     return (
       <div className="my-3">
         <p>

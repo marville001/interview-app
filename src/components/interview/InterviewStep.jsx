@@ -76,12 +76,13 @@ export default class InterviewStep extends React.Component {
     // generate video url from blob
     // const videoURL = window.URL.createObjectURL(blob);
     const newState = [
-      ...this.context.state.videos,
+      ...(this.context.state.videos || []),
       { interviewId: "awewa", questionId: this.state.current.id, blob },
     ];
-    this.context.setState({
+    this.context.setState((prev) => ({
+      ...prev,
       videos: newState,
-    });
+    }));
     return newState;
   }
 
@@ -130,12 +131,11 @@ export default class InterviewStep extends React.Component {
       localStorage.setItem("videos", JSON.stringify(vs));
       // console.log(await v);
     });
-
-    console.log({ vsss });
   };
 
   render() {
     const { recording, interview, current, index, end } = this.state;
+    console.log({ vsss: this.context });
     return (
       <div className="my-3">
         <p>

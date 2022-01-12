@@ -1,6 +1,7 @@
 import React from "react";
 
 const FamiliarizeStep = ({ step, setStep }) => {
+  
   return (
     <div className="my-5">
       <p>

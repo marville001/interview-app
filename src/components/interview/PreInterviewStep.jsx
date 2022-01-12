@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import Context from "../../context";
 
 const PreInterviewStep = ({ step, setStep }) => {
+  const { setState, state } = useContext(Context);
+  const [check, setCheck] = useState(true)
+  const [inits, setInits] = useState("")
+
+  console.log({ state });
   return (
     <div className="my-5">
-      <p className="my-3">Well done, XYZ</p>
+      <p className="my-3">Well done, {state?.candidate?.name}</p>
 
       <p>
         You are now ready to start your interview. If you need more time you can
@@ -21,7 +27,10 @@ const PreInterviewStep = ({ step, setStep }) => {
       </p>
 
       <div className="d-flex">
-        <input id="internet" type="checkbox" name="" className="mt-2" />
+        <input 
+        checked={check}
+        onChange={e=>setCheck(e.target.check)}
+        type="checkbox" name="" className="mt-2" />
         <label htmlFor="internet" className="py-0 m-0 mx-2">
           Please click the box and enter your initials below to confirm that you
           you understood & agree with the above statement & all terms and
@@ -35,8 +44,14 @@ const PreInterviewStep = ({ step, setStep }) => {
       >
         <input
           type="text"
+          value={state?.initials || ""}
+          onChange={(e) =>{
+            setState((prev) => ({ ...prev, initials: e.target.value }))
+            setInits(e.target.value)
+          }
+          }
           className="form-control my-2 py-2"
-          style={{ width: "300px", fontSize:"20px", textAlign:"center" }}
+          style={{ width: "300px", fontSize: "20px", textAlign: "center" }}
         />
         <button
           onClick={() => setStep(step + 1)}
