@@ -35,14 +35,15 @@ export default class InterviewStep extends React.Component {
     const total = duration * 60;
     this.setState({ remaining: total });
     setInterval(() => {
-        
-        if(this.state.remaining === 0){
-              // this.handleNextQuestion();
-        }else{
-          this.setState({
-            remaining: this.state.remaining - 1,
-          });
-        }
+      if (this.state.remaining === 0) {
+        // this.handleNextQuestion();
+        // this.mediaRecorder.stop();
+        // this.setState({ recording: true });
+      } else {
+        this.setState({
+          remaining: this.state.remaining - 1,
+        });
+      }
     }, 1200);
   };
 
@@ -78,9 +79,11 @@ export default class InterviewStep extends React.Component {
 
   stopRecording() {
     // stop the recorder
-    this.mediaRecorder.stop();
+    if (this.mediaRecorder) {
+      this.mediaRecorder.stop();
+      this.setState({ recording: false });
+    }
     // say that we're not recording
-    this.setState({ recording: false });
     // save the video to memory
     return this.saveVideo();
   }
@@ -154,7 +157,7 @@ export default class InterviewStep extends React.Component {
   };
 
   render() {
-    const { recording,remaining, interview, current, index, end } = this.state;
+    const { recording, remaining, interview, current, index, end } = this.state;
     const { loading } = this.context.state;
     return (
       <div className="my-3">
@@ -187,8 +190,7 @@ export default class InterviewStep extends React.Component {
             </div>
           </div>
           <h6>
-            Time left{" "}
-            <strong className="mx-2">{remaining} seconds</strong>
+            Time left <strong className="mx-2">{remaining} seconds</strong>
           </h6>
         </div>
 
