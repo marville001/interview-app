@@ -54,6 +54,7 @@ const PreInterviewStep = ({ step, setStep }) => {
           style={{ width: "300px", fontSize: "20px", textAlign: "center" }}
         />
         <button
+        disabled={inits === "" && true}
           onClick={() => setStep(step + 1)}
           className="btn btn-primary checkCam my-4"
         >

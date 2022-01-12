@@ -17,6 +17,7 @@ export default class PracticeInterviewStep extends React.Component {
           duration: 3,
         },
       ],
+      remaining: 0,
       index: 0,
       end: false,
     };
@@ -25,9 +26,13 @@ export default class PracticeInterviewStep extends React.Component {
   async componentDidMount() {
     const { practice } = questions;
     this.setState({ practice });
-    
+
     const quiz = practice?.find((p) => p.id === this.state.index.toString());
-    this.setState({ current: quiz });
+    this.setState({
+      current: quiz,
+    });
+    this.updateRemaining(quiz.duration);
+
     const stream = await navigator.mediaDevices.getUserMedia({
       video: true,
       //   audio: true,
@@ -49,21 +54,37 @@ export default class PracticeInterviewStep extends React.Component {
     };
   }
 
+  updateRemaining = (duration) => {
+    const total = duration * 60;
+    this.setState({ remaining: total });
+    setInterval(() => {
+      this.state.remaining > 0 &&
+        this.setState({
+          remaining: this.state.remaining - 1,
+        });
+    }, 1000);
+  };
+
   handleNextQuestion = () => {
     const { practice } = this.state;
     const length = practice.length;
-    if (length - 1  === this.state.index+1) {
+    if (length - 1 === this.state.index + 1) {
       this.setState({ end: true });
     }
-    if(this.state.index +1 <= length){
+    if (this.state.index + 1 <= length) {
       this.setState({ index: this.state.index + 1 });
+      const quiz = practice?.find(
+        (p) => p.id === (this.state.index + 1).toString()
+      );
+      this.updateRemaining(quiz.duration);
+      this.setState({
+        current: quiz,
+      });
     }
-
   };
 
-
   render() {
-    const { current, practice,  index, end } = this.state;
+    const { current, remaining, practice, index, end } = this.state;
     const { step, setStep } = this.props;
     return (
       <div className="my-3">
@@ -78,7 +99,7 @@ export default class PracticeInterviewStep extends React.Component {
               <span style={{ fontWeight: "bold" }}>
                 Question {index + 1 + " / " + practice.length}
               </span>
-              <h6>{practice[index].question} </h6>
+              <h6>{current.question} </h6>
             </div>
             <div className="cam-container">
               {
@@ -94,8 +115,7 @@ export default class PracticeInterviewStep extends React.Component {
             </div>
           </div>
           <h6>
-            Time left{" "}
-            <strong className="mx-2">{current.duration} minutes</strong>
+            Time left <strong className="mx-2">{remaining} seconds</strong>
           </h6>
         </div>
 
@@ -104,7 +124,7 @@ export default class PracticeInterviewStep extends React.Component {
           {end ? (
             <button
               className="btn btn-primary"
-              onClick={()=>setStep(step+1)}
+              onClick={() => setStep(step + 1)}
             >
               Submit
             </button>

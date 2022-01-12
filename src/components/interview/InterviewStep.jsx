@@ -12,6 +12,7 @@ export default class InterviewStep extends React.Component {
       recording: false,
       current: {},
       interview: [],
+      remaining: 0,
       index: 0,
       end: false,
     };
@@ -25,9 +26,25 @@ export default class InterviewStep extends React.Component {
     this.setState({ current: interview[this.state.index] });
     const quiz = interview?.find((p) => p.id === this.state.index.toString());
     this.setState({ current: quiz });
+    this.updateRemaining(quiz.duration);
 
     this.startRecording();
   }
+
+  updateRemaining = (duration) => {
+    const total = duration * 60;
+    this.setState({ remaining: total });
+    setInterval(() => {
+        
+        if(this.state.remaining === 0){
+              // this.handleNextQuestion();
+        }else{
+          this.setState({
+            remaining: this.state.remaining - 1,
+          });
+        }
+    }, 1200);
+  };
 
   async startRecording() {
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -97,6 +114,7 @@ export default class InterviewStep extends React.Component {
     if (this.state.index + 1 <= length) {
       this.setState({ index: this.state.index + 1 });
       this.setState({ current: interview[this.state.index + 1] });
+      this.updateRemaining(interview[this.state.index + 1].duration);
     }
 
     this.startRecording();
@@ -110,32 +128,34 @@ export default class InterviewStep extends React.Component {
     });
   };
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
     let state_ = this.stopRecording();
     // this.props.setStep(this.props.step + 1);
     console.log({ state_ });
     const videosBlobs = state_.map((v) => v.blob);
-    const base64Videos = videosBlobs.map(
-      async (blob) => await this.blobToBase64(blob)
-    );
+    // console.log({ videosBlobs });
+    await this.context.submitInterviewAnswers(videosBlobs);
+    // const base64Videos = videosBlobs.map(
+    //   async (blob) => await this.blobToBase64(blob)
+    // );
 
-    let vsss = [];
+    // let vsss = [];
 
-    localStorage.removeItem("videos");
+    // localStorage.removeItem("videos");
 
-    base64Videos.forEach(async (v) => {
-      v = await v;
-      let vs = JSON.parse(localStorage.getItem("videos")) || [];
-      vs.push(v);
-      vsss.push(v);
-      localStorage.setItem("videos", JSON.stringify(vs));
-      // console.log(await v);
-    });
+    // base64Videos.forEach(async (v) => {
+    //   v = await v;
+    //   let vs = JSON.parse(localStorage.getItem("videos")) || [];
+    //   vs.push(v);
+    //   vsss.push(v);
+    //   localStorage.setItem("videos", JSON.stringify(vs));
+    //   // console.log(await v);
+    // });
   };
 
   render() {
-    const { recording, interview, current, index, end } = this.state;
-    console.log({ vsss: this.context });
+    const { recording,remaining, interview, current, index, end } = this.state;
+    const { loading } = this.context.state;
     return (
       <div className="my-3">
         <p>
@@ -168,18 +188,23 @@ export default class InterviewStep extends React.Component {
           </div>
           <h6>
             Time left{" "}
-            <strong className="mx-2">{current.duration} minutes</strong>
+            <strong className="mx-2">{remaining} seconds</strong>
           </h6>
         </div>
 
         <div className="d-flex align-items-center justify-content-center mb-3 mt-5">
           <input type="checkbox" className="check-box" />
           {end ? (
-            <button className="btn btn-primary" onClick={this.handleSubmit}>
-              Finish
+            <button
+              disabled={loading}
+              className="btn btn-primary"
+              onClick={this.handleSubmit}
+            >
+              {loading ? "Loading...." : "Finish"}
             </button>
           ) : (
             <button
+              disabled={loading}
               className="btn btn-primary"
               onClick={this.handleNextQuestion}
             >
