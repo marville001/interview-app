@@ -31,28 +31,32 @@ export const ContextProvider = ({ children }) => {
     }
   };
 
-  const submitInterviewAnswers = async (blobs) => {
-    console.log({ blobs });
+  const submitInterviewAnswers = async (videos) => {
+    const { interview, candidate } = state;
+    console.log({ videos });
     try {
       let formData = new FormData();
+      formData.append("interviewId", interview._id);
+      formData.append("candidateId", candidate._id);
 
-      for (let blob of blobs) {
-        formData.append("files", blob);
+      for (let video of videos) {
+        formData.append("files", video.blob);
+        formData.append("questionId", video.questionId);
       }
 
       setState((prev) => ({ ...prev, loading: true }));
-      const { data } = await axios.post(
-        `https://my-interview-api.herokuapp.com/api/candidate/submit_answers/${state.interview._id}`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      // const URL = `https://my-interview-api.herokuapp.com/api/candidate/submit_answers/${state.interview._id}`;
+      const URL = "http://localhost:5505/upload";
+      const { data } = await axios.post(URL, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       console.log({ data });
       setState((prev) => ({
         ...prev,
         loading: false,
       }));
+
+      return data;
     } catch (error) {
       setState((prev) => ({ ...prev, loading: false }));
       console.log({ error });

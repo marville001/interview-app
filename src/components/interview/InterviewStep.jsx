@@ -97,7 +97,12 @@ export default class InterviewStep extends React.Component {
     // const videoURL = window.URL.createObjectURL(blob);
     const newState = [
       ...(this.context.state.videos || []),
-      { interviewId: "awewa", questionId: this.state.current.id, blob },
+      {
+        interviewId: this.context.state.interview._id,
+        candidateId: this.context.state.candidate._id,
+        questionId: this.state.current.id,
+        blob,
+      },
     ];
     this.context.setState((prev) => ({
       ...prev,
@@ -132,28 +137,13 @@ export default class InterviewStep extends React.Component {
   };
 
   handleSubmit = async () => {
-    let state_ = this.stopRecording();
-    // this.props.setStep(this.props.step + 1);
-    console.log({ state_ });
-    const videosBlobs = state_.map((v) => v.blob);
-    // console.log({ videosBlobs });
-    await this.context.submitInterviewAnswers(videosBlobs);
-    // const base64Videos = videosBlobs.map(
-    //   async (blob) => await this.blobToBase64(blob)
-    // );
-
-    // let vsss = [];
-
-    // localStorage.removeItem("videos");
-
-    // base64Videos.forEach(async (v) => {
-    //   v = await v;
-    //   let vs = JSON.parse(localStorage.getItem("videos")) || [];
-    //   vs.push(v);
-    //   vsss.push(v);
-    //   localStorage.setItem("videos", JSON.stringify(vs));
-    //   // console.log(await v);
-    // });
+    let videos = this.stopRecording();
+    const res = await this.context.submitInterviewAnswers(videos);
+    if (res.success) {
+      this.props.setStep(this.props.step + 1);
+    }else{
+      alert("An error occurred")
+    }
   };
 
   render() {

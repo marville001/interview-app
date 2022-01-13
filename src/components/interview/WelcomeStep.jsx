@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Context from "../../context";
 
 const WelcomeStep = ({ step, setStep }) => {
   const { state } = useContext(Context);
+  const [checkInfo, setCheckInfo] = useState(false);
 
   return (
     <div className="mt-3">
@@ -60,6 +61,8 @@ const WelcomeStep = ({ step, setStep }) => {
           id="check"
           type="checkbox"
           name=""
+          checked={checkInfo}
+          onChange={(e) => setCheckInfo(e.target.checked)}
           className="form-controll mt-1"
         />
         <label htmlFor="check" className="py-0 m-0 mx-2">
@@ -79,7 +82,9 @@ const WelcomeStep = ({ step, setStep }) => {
 
       <button
         disabled={
-          !state?.candidate?._id || !state?.interview?._id ? true : false
+          !state?.candidate?._id || !state?.interview?._id || !checkInfo
+            ? true
+            : false
         }
         onClick={() => setStep(step + 1)}
         className="btn btn-success"

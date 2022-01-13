@@ -5,6 +5,7 @@ const CorrectDetailsStep = ({ step, setStep }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [checkInfo, setCheckInfo] = useState(false);
 
   const { addCandidate, state } = useContext(Context);
 
@@ -40,7 +41,7 @@ const CorrectDetailsStep = ({ step, setStep }) => {
     await addCandidate(obj);
   };
 
-  console.log({state});
+  console.log({ state });
 
   return (
     <div className="mt-3">
@@ -162,6 +163,8 @@ const CorrectDetailsStep = ({ step, setStep }) => {
           id="check"
           type="checkbox"
           name=""
+          checked={checkInfo}
+          onChange={(e) => setCheckInfo(e.target.checked)}
           className="form-controll mt-1"
         />
         <label htmlFor="check" className="py-0 m-0 mx-2">
@@ -180,7 +183,11 @@ const CorrectDetailsStep = ({ step, setStep }) => {
       </p>
 
       <button
-        disabled={!state?.candidate?._id || !state?.interview?._id ? true : false}
+        disabled={
+          !state?.candidate?._id || !state?.interview?._id || !checkInfo
+            ? true
+            : false
+        }
         onClick={() => setStep(step + 1)}
         className="btn btn-success"
       >

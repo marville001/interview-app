@@ -20,12 +20,14 @@ export default class PracticeInterviewStep extends React.Component {
       remaining: 0,
       index: 0,
       end: false,
+      checked: false,
     };
   }
 
   async componentDidMount() {
     const { practice } = questions;
     this.setState({ practice });
+    this.setState({ checked: false });
 
     const quiz = practice?.find((p) => p.id === this.state.index.toString());
     this.setState({
@@ -66,6 +68,7 @@ export default class PracticeInterviewStep extends React.Component {
   };
 
   handleNextQuestion = () => {
+    this.setState({ checked: false });
     const { practice } = this.state;
     const length = practice.length;
     if (length - 1 === this.state.index + 1) {
@@ -120,7 +123,12 @@ export default class PracticeInterviewStep extends React.Component {
         </div>
 
         <div className="d-flex align-items-center justify-content-center mb-3 mt-5">
-          <input type="checkbox" className="check-box" />
+          <input
+            value={this.state.checked}
+            onChange={(e) => this.setState({ checked: e.target.checked })}
+            type="checkbox"
+            className="check-box"
+          />
           {end ? (
             <button
               className="btn btn-primary"
