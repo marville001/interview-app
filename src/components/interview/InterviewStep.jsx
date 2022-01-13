@@ -203,8 +203,6 @@ export default class InterviewStep extends React.Component {
               Next Question
             </button>
           )}
-          {}
-          {this.context.state.videos?.length}
         </div>
       </div>
     );
